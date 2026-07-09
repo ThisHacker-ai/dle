@@ -1,0 +1,20 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+x = np.arange(100)
+
+actual = np.sin(x/5)+ np.random.normal(0, 0.2, 100)
+
+predicted = np.sin(x/5)
+
+plt.plot(actual, 'r', label="Actual")
+plt.plot(predicted, 'b', label="Predicted")
+
+plt.title("Stock")
+plt.xlabel("Time")
+plt.ylabel("Price")
+
+plt.legend()
+
+plt.show()
