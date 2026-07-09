@@ -1,0 +1,72 @@
+import tensorflow as tf
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import SimpleRNN, Dense
+from tensorflow.keras.layers import Conv2D, Flatten
+from tensorflow.keras.datasets import mnist
+
+# Load data
+(x_train,y_train),(x_test,y_test)=mnist.load_data()
+
+x_train=x_train[:1000]/255.0
+y_train=y_train[:1000]
+
+x_test=x_test[:200]/255.0
+y_test=y_test[:200]
+
+# ---------- RNN ----------
+rnn=Sequential([
+    SimpleRNN(32,input_shape=(28,28)),
+    Dense(10,activation='softmax')
+])
+
+rnn.compile(
+optimizer='adam',
+loss='sparse_categorical_crossentropy',
+metrics=['accuracy']
+)
+
+rnn.fit(x_train,y_train,epochs=1,verbose=0)
+
+rnn_acc=rnn.evaluate(
+x_test,y_test,
+verbose=0
+)[1]
+
+# ---------- CNN ----------
+x_train_cnn=x_train[...,tf.newaxis]
+x_test_cnn=x_test[...,tf.newaxis]
+
+cnn=Sequential([
+    Conv2D(16,(3,3),
+    activation='relu',
+    input_shape=(28,28,1)),
+    Flatten(),
+    Dense(10,activation='softmax')
+])
+
+cnn.compile(
+optimizer='adam',
+loss='sparse_categorical_crossentropy',
+metrics=['accuracy']
+)
+
+cnn.fit(
+x_train_cnn,
+y_train,
+epochs=1,
+verbose=0
+)
+
+cnn_acc=cnn.evaluate(
+x_test_cnn,
+y_test,
+verbose=0
+)[1]
+
+print("RNN Accuracy =",round(rnn_acc*100,2),"%")
+print("CNN Accuracy =",round(cnn_acc*100,2),"%")
+
+if cnn_acc>rnn_acc:
+    print("CNN performs better")
+else:
+    print("RNN performs better")
