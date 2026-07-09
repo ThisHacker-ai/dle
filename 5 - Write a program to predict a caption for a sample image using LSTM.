@@ -1,0 +1,25 @@
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Embedding,LSTM,Dense
+import numpy as np
+
+X=np.array([[1,2,3]])
+Y=np.array([4])
+
+model=Sequential([
+Embedding(10,8,input_length=3),
+LSTM(8),
+Dense(5,activation='softmax')
+])
+
+model.compile(
+loss='sparse_categorical_crossentropy',
+optimizer='adam'
+)
+
+model.fit(X,Y,epochs=50,verbose=0)
+
+words=["person","dog","car","tree","surfing"]
+
+p=np.argmax(model.predict(X),axis=1)[0]
+
+print("Caption =",words[p])
