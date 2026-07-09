@@ -1,0 +1,24 @@
+from tensorflow.keras.datasets import mnist
+import numpy as np
+import matplotlib.pyplot as plt
+
+(xtrain, _), (xtest, _) = mnist.load_data()
+
+img = xtest[0]
+
+encoded = img[::2, ::2]
+
+decoded = np.repeat(np.repeat(encoded, 2, axis=0), 2, axis=1)
+
+plt.subplot(1,3,1)
+plt.title("Original")
+plt.imshow(img, cmap="gray")
+
+plt.subplot(1,3,2)
+plt.title("Encoded")
+plt.imshow(encoded, cmap="gray")
+
+
+plt.subplot(1,3,3)
+plt.title("Decoded")
+plt.imshow(decoded, cmap="gray")
